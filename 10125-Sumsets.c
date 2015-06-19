@@ -167,6 +167,7 @@ int main () {
 
         if (pIndexSetNode->pSet->num < 4) {
             printf("no solution\n");
+            pIndexSetNode = pIndexSetNode->pNextNode;
             continue;
         }
 
