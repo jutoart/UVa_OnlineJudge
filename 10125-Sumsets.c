@@ -26,27 +26,39 @@ void Swap_Integer (int* px, int* py) {
 }
 
 void QuickSort_Integer (int* pNumArray, int arrayLength) {
-    int index = 0, pivot = 0;
+    int indexLeft = 1, indexRight = arrayLength - 1, pivot = 0;
 
     if (arrayLength <= 1) {
         return;
     }
 
-    for (index = 0; index < arrayLength; index++) {
-        if (((index > pivot) && (pNumArray[index] < pNumArray[pivot])) ||
-                ((index < pivot) && (pNumArray[index] > pNumArray[pivot]))) {
-            Swap_Integer(&(pNumArray[index]), &(pNumArray[pivot]));
-            pivot = index;
+    while (1) {
+        while (indexLeft < arrayLength) {
+            if (pNumArray[indexLeft] > pNumArray[pivot]) {
+                break;
+            }
+
+            indexLeft++;
         }
+
+        while (indexRight > 0) {
+            if (pNumArray[indexRight] < pNumArray[pivot]) {
+                break;
+            }
+
+            indexRight--;
+        }
+
+        if (indexLeft > indexRight) {
+            break;
+        }
+
+        Swap_Integer(&(pNumArray[indexLeft]), &(pNumArray[indexRight]));
     }
 
-    if (pivot > 0) {
-        QuickSort_Integer(pNumArray, pivot);
-    }
-
-    if (pivot < arrayLength - 1) {
-        QuickSort_Integer(&(pNumArray[pivot+1]), arrayLength - 1 - pivot);
-    }
+    Swap_Integer(&(pNumArray[pivot]), &(pNumArray[indexRight]));
+    QuickSort_Integer(pNumArray, pivot);
+    QuickSort_Integer(&(pNumArray[pivot+1]), arrayLength - 1 - pivot);
 
     return;
 }
@@ -59,27 +71,39 @@ void Swap_TwoNumSum (TwoNumSum* px, TwoNumSum* py) {
 }
 
 void QuickSort_TwoNumSum (TwoNumSum* pArray, int arrayLength) {
-    int index = 0, pivot = 0;
+    int indexLeft = 1, indexRight = arrayLength - 1, pivot = 0;
 
     if (arrayLength <= 1) {
         return;
     }
 
-    for (index = 0; index < arrayLength; index++) {
-        if (((index > pivot) && (pArray[index].sum < pArray[pivot].sum)) ||
-                ((index < pivot) && (pArray[index].sum > pArray[pivot].sum))) {
-            Swap_TwoNumSum(&(pArray[index]), &(pArray[pivot]));
-            pivot = index;
+    while (1) {
+        while (indexLeft < arrayLength) {
+            if (pArray[indexLeft].sum > pArray[pivot].sum) {
+                break;
+            }
+
+            indexLeft++;
         }
+
+        while (indexRight > 0) {
+            if (pArray[indexRight].sum < pArray[pivot].sum) {
+                break;
+            }
+
+            indexRight--;
+        }
+
+        if (indexLeft > indexRight) {
+            break;
+        }
+
+        Swap_TwoNumSum(&(pArray[indexLeft]), &(pArray[indexRight]));
     }
 
-    if (pivot > 0) {
-        QuickSort_TwoNumSum(pArray, pivot);
-    }
-
-    if (pivot < arrayLength - 1) {
-        QuickSort_TwoNumSum(&(pArray[pivot+1]), arrayLength - 1 - pivot);
-    }
+    Swap_TwoNumSum(&(pArray[pivot]), &(pArray[indexRight]));
+    QuickSort_TwoNumSum(pArray, pivot);
+    QuickSort_TwoNumSum(&(pArray[pivot+1]), arrayLength - 1 - pivot);
 
     return;
 }
@@ -176,20 +200,18 @@ int main () {
         memset(pSumArray, 0, sizeof(arrayLength*sizeof(TwoNumSum)));
 
         printf("%d\n", pIndexSetNode->pSet->num);
-        printf("array length = %d\n", arrayLength);
 
         for (firstNumIndex = 0; firstNumIndex < pIndexSetNode->pSet->num - 1; firstNumIndex++) {
             for (secondNumIndex = firstNumIndex + 1; secondNumIndex < pIndexSetNode->pSet->num; secondNumIndex++) {
                 pSumArray[count].sum = pIndexSetNode->pSet->pElements[firstNumIndex] + pIndexSetNode->pSet->pElements[secondNumIndex];
                 pSumArray[count].firstNumIndex = firstNumIndex;
                 pSumArray[count].secondNumIndex = secondNumIndex;
-                printf("sum=%d, a=%d, b=%d\n", pSumArray[count].sum, firstNumIndex, secondNumIndex);
+                printf("sum=%d, a=%d, b=%d\n", pSumArray[count].sum, pIndexSetNode->pSet->pElements[firstNumIndex], pIndexSetNode->pSet->pElements[secondNumIndex]);
                 count++;
             }
         }
 
         QuickSort_TwoNumSum(pSumArray, arrayLength);
-        printf("array length = %d\n", arrayLength);
         solutionFound = 0;
 
         for (firstNumIndex = pIndexSetNode->pSet->num - 1; firstNumIndex >= 0; firstNumIndex--) {
@@ -201,7 +223,6 @@ int main () {
                 }
 
                 printf("try d=%d, c=%d\n", pIndexSetNode->pSet->pElements[firstNumIndex], pIndexSetNode->pSet->pElements[secondNumIndex]);
-                printf("array length = %d\n", arrayLength);
 
                 sumIndex = BinarySearchSumArray(pSumArray, arrayLength, pIndexSetNode->pSet->pElements[firstNumIndex] - pIndexSetNode->pSet->pElements[secondNumIndex]);
 
