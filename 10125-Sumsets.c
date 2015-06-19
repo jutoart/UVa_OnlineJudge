@@ -120,8 +120,6 @@ int BinarySearchSumArray (TwoNumSum* pArray, int arrayLength, int searchNum) {
         }
     }
 
-    printf("searched %d for %d\n", pArray[index].sum, searchNum);
-
     if (pArray[index].sum == searchNum) {
         return index;
     }
@@ -199,14 +197,11 @@ int main () {
         pSumArray = (TwoNumSum*)malloc(arrayLength*sizeof(TwoNumSum));
         memset(pSumArray, 0, sizeof(arrayLength*sizeof(TwoNumSum)));
 
-        printf("%d\n", pIndexSetNode->pSet->num);
-
         for (firstNumIndex = 0; firstNumIndex < pIndexSetNode->pSet->num - 1; firstNumIndex++) {
             for (secondNumIndex = firstNumIndex + 1; secondNumIndex < pIndexSetNode->pSet->num; secondNumIndex++) {
                 pSumArray[count].sum = pIndexSetNode->pSet->pElements[firstNumIndex] + pIndexSetNode->pSet->pElements[secondNumIndex];
                 pSumArray[count].firstNumIndex = firstNumIndex;
                 pSumArray[count].secondNumIndex = secondNumIndex;
-                printf("sum=%d, a=%d, b=%d\n", pSumArray[count].sum, pIndexSetNode->pSet->pElements[firstNumIndex], pIndexSetNode->pSet->pElements[secondNumIndex]);
                 count++;
             }
         }
@@ -222,19 +217,13 @@ int main () {
                     continue;
                 }
 
-                printf("try d=%d, c=%d\n", pIndexSetNode->pSet->pElements[firstNumIndex], pIndexSetNode->pSet->pElements[secondNumIndex]);
-
                 sumIndex = BinarySearchSumArray(pSumArray, arrayLength, pIndexSetNode->pSet->pElements[firstNumIndex] - pIndexSetNode->pSet->pElements[secondNumIndex]);
 
                 if (sumIndex >= 0) {
-                    printf("found %d length=%d\n", sumIndex, arrayLength);
-
                     while (sumIndex < arrayLength) {
                         if (pSumArray[sumIndex].sum != pIndexSetNode->pSet->pElements[firstNumIndex] - pIndexSetNode->pSet->pElements[secondNumIndex]) {
                             break;
                         }
-
-                        printf("a=%d, b=%d, c=%d, d=%d\n", pSumArray[sumIndex].firstNumIndex, pSumArray[sumIndex].secondNumIndex, secondNumIndex, firstNumIndex);
 
                         if ((pSumArray[sumIndex].firstNumIndex != firstNumIndex) &&
                                 (pSumArray[sumIndex].firstNumIndex != secondNumIndex) &&
