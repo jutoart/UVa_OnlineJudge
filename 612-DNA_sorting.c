@@ -187,11 +187,11 @@ int main () {
             printf("\n");
         }
 
-        if (dataSetNum > 1) {
+        pIndexDataSetNode = pIndexDataSetNode->pNextNode;
+
+        if (pIndexDataSetNode != NULL) {
             printf("\n");
         }
-
-        pIndexDataSetNode = pIndexDataSetNode->pNextNode;
     }
 
     pIndexDataSetNode = pStartDataSetNode;
