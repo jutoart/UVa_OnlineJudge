@@ -128,22 +128,22 @@ int BinarySearchSumArray (TwoNumSum* pArray, int arrayLength, int searchNum) {
             return -1;
         }
         else {
-            int leftResult = BinarySearchSumArray(pArray, index, searchNum);
-            int rightResult = -1;
-
-            if (leftResult != -1) {
-                return leftResult;
+            if (searchNum < pArray[index].sum) {
+                return BinarySearchSumArray(pArray, index, searchNum);
             }
+            else {
+                int rightResult = -1;
 
-            if (index != arrayLength - 1) {
-                rightResult = BinarySearchSumArray(&(pArray[index+1]), arrayLength - 1 - index, searchNum);
+                if (index != arrayLength - 1) {
+                    rightResult = BinarySearchSumArray(&(pArray[index+1]), arrayLength - 1 - index, searchNum);
 
-                if (rightResult != -1) {
-                    rightResult = rightResult + index + 1;
+                    if (rightResult != -1) {
+                        rightResult = rightResult + index + 1;
+                    }
                 }
-            }
 
-            return rightResult;
+                return rightResult;
+            }
         }
     }
 }
