@@ -28,15 +28,6 @@ void QuickSort_StrUnsortedness (DataSet* pDataSet, int start, int end) {
     pNewUnsortedness = (int*)malloc((end-start+1)*sizeof(int));
     ppNewStrData = (int**)malloc((end-start+1)*sizeof(int*));
 
-    printf("start=%d, end=%d\n", start, end);
-    printf("Sort:");
-
-    for (index = start; index <= end; index++) {
-        printf(" %d", pDataSet->pStrUnsortedness[index]);
-    }
-
-    printf("\n");
-
     for (index = start + 1; index <= end; index++) {
         if (pDataSet->pStrUnsortedness[index] < pDataSet->pStrUnsortedness[start]) {
             pNewUnsortedness[count] = pDataSet->pStrUnsortedness[index];
@@ -58,16 +49,10 @@ void QuickSort_StrUnsortedness (DataSet* pDataSet, int start, int end) {
         }
     }
 
-    printf("After sort:");
-
     for (index = 0; index <= end - start; index++) {
         pDataSet->pStrUnsortedness[start+index] = pNewUnsortedness[index];
         pDataSet->ppStrInNumForm[start+index] = ppNewStrData[index];
-        printf(" %d", pNewUnsortedness[index]);
     }
-
-    printf("\n");
-    printf("pivot=%d\n", pivot);
 
     free(pNewUnsortedness);
     free(ppNewStrData);
@@ -199,7 +184,7 @@ int main () {
                 printf("%c", DNA_letters[pIndexDataSetNode->pDataSet->ppStrInNumForm[strIndex][chrIndex]]);
             }
 
-            printf(" %d\n", pIndexDataSetNode->pDataSet->pStrUnsortedness[strIndex]);
+            printf("\n");
         }
 
         if (dataSetNum > 1) {
