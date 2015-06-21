@@ -8,6 +8,7 @@ typedef struct DataSet_T {
     int strLength;
     int strNum;
     int** ppStrInNumForm;
+    int* pStrUnsortedness;
 } DataSet;
 
 typedef struct DataSetNode_T {
@@ -68,6 +69,8 @@ int main () {
 
         pNewDataSetNode->pDataSet->ppStrInNumForm = (int**)malloc(pNewDataSetNode->pDataSet->strNum*sizeof(int*));
         memset(pNewDataSetNode->pDataSet->ppStrInNumForm, 0, pNewDataSetNode->pDataSet->strNum*sizeof(int*));
+        pNewDataSetNode->pDataSet->pStrUnsortedness = (int*)malloc(pNewDataSetNode->pDataSet->strNum*sizeof(int));
+        memset(pNewDataSetNode->pDataSet->pStrUnsortedness, 0, pNewDataSetNode->pDataSet->strNum*sizeof(int));
 
         for (strIndex = 0; strIndex < pNewDataSetNode->pDataSet->strNum; strIndex++) {
             pNewDataSetNode->pDataSet->ppStrInNumForm[strIndex] = (int*)malloc(pNewDataSetNode->pDataSet->strLength*sizeof(int));
