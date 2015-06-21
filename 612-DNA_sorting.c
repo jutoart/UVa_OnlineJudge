@@ -16,6 +16,66 @@ typedef struct DataSetNode_T {
     struct DataSetNode_T* pNextNode;
 } DataSetNode;
 
+void QuickSort_StrUnsortedness (DataSet* pDataSet, int start, int end) {
+    int index = 0, count = 0, pivot = 0;
+    int* pNewUnsortedness = NULL;
+    int** ppNewStrData = NULL;
+
+    if (end - start < 1) {
+        return;
+    }
+
+    pNewUnsortedness = (int*)malloc((end-start+1)*sizeof(int));
+    ppNewStrData = (int**)malloc((end-start+1)*sizeof(int*));
+
+    printf("start=%d, end=%d\n", start, end);
+    printf("Sort:");
+
+    for (index = start; index <= end; index++) {
+        printf(" %d", pDataSet->pStrUnsortedness[index]);
+    }
+
+    printf("\n");
+
+    for (index = start + 1; index <= end; index++) {
+        if (pDataSet->pStrUnsortedness[index] < pDataSet->pStrUnsortedness[start]) {
+            pNewUnsortedness[count] = pDataSet->pStrUnsortedness[index];
+            ppNewStrData[count] = pDataSet->ppStrInNumForm[index];
+            count++;
+        }
+    }
+
+    pivot = start + count;
+    pNewUnsortedness[count] = pDataSet->pStrUnsortedness[start];
+    ppNewStrData[count] = pDataSet->ppStrInNumForm[start];
+    count++;
+
+    for (index = start + 1; index <= end; index++) {
+        if (pDataSet->pStrUnsortedness[index] >= pDataSet->pStrUnsortedness[start]) {
+            pNewUnsortedness[count] = pDataSet->pStrUnsortedness[index];
+            ppNewStrData[count] = pDataSet->ppStrInNumForm[index];
+            count++;
+        }
+    }
+
+    printf("After sort:");
+
+    for (index = 0; index <= end - start; index++) {
+        pDataSet->pStrUnsortedness[start+index] = pNewUnsortedness[index];
+        pDataSet->ppStrInNumForm[start+index] = ppNewStrData[index];
+        printf(" %d", pNewUnsortedness[index]);
+    }
+
+    printf("\n");
+    printf("pivot=%d\n", pivot);
+
+    free(pNewUnsortedness);
+    free(ppNewStrData);
+    QuickSort_StrUnsortedness(pDataSet, start, pivot-1);
+    QuickSort_StrUnsortedness(pDataSet, pivot+1, end);
+    return;
+}
+
 int CalculateUnsortedness (int* pSequence, int length) {
     int index = 0, unsortedness = 0;
     int letterCount[DNA_LETTER_COUNT] = {0};
@@ -117,6 +177,21 @@ int main () {
     pIndexDataSetNode = pStartDataSetNode;
 
     while (pIndexDataSetNode != NULL) {
+        int strIndex = 0;
+        int* pNewUnsortedness = (int*)malloc(pIndexDataSetNode->pDataSet->strNum*sizeof(int));
+        int** ppNewStrData = (int**)malloc(pIndexDataSetNode->pDataSet->strNum*sizeof(int*));
+
+        for (strIndex = 0; strIndex < pIndexDataSetNode->pDataSet->strNum; strIndex++) {
+            pIndexDataSetNode->pDataSet->pStrUnsortedness[strIndex] = CalculateUnsortedness(pIndexDataSetNode->pDataSet->ppStrInNumForm[strIndex], pIndexDataSetNode->pDataSet->strLength);
+        }
+
+        QuickSort_StrUnsortedness(pIndexDataSetNode->pDataSet, 0, pIndexDataSetNode->pDataSet->strNum-1);
+        pIndexDataSetNode = pIndexDataSetNode->pNextNode;
+    }
+
+    pIndexDataSetNode = pStartDataSetNode;
+
+    while (pIndexDataSetNode != NULL) {
         int strIndex = 0, chrIndex = 0;
 
         for (strIndex = 0; strIndex < pIndexDataSetNode->pDataSet->strNum; strIndex++) {
@@ -124,7 +199,7 @@ int main () {
                 printf("%c", DNA_letters[pIndexDataSetNode->pDataSet->ppStrInNumForm[strIndex][chrIndex]]);
             }
 
-            printf("\n");
+            printf(" %d\n", pIndexDataSetNode->pDataSet->pStrUnsortedness[strIndex]);
         }
 
         if (dataSetNum > 1) {
