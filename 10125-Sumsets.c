@@ -57,8 +57,8 @@ void QuickSort_Integer (int* pNumArray, int arrayLength) {
     }
 
     Swap_Integer(&(pNumArray[pivot]), &(pNumArray[indexRight]));
-    QuickSort_Integer(pNumArray, pivot);
-    QuickSort_Integer(&(pNumArray[pivot+1]), arrayLength - 1 - pivot);
+    QuickSort_Integer(pNumArray, indexRight);
+    QuickSort_Integer(&(pNumArray[indexRight+1]), arrayLength - 1 - indexRight);
 
     return;
 }
@@ -102,8 +102,8 @@ void QuickSort_TwoNumSum (TwoNumSum* pArray, int arrayLength) {
     }
 
     Swap_TwoNumSum(&(pArray[pivot]), &(pArray[indexRight]));
-    QuickSort_TwoNumSum(pArray, pivot);
-    QuickSort_TwoNumSum(&(pArray[pivot+1]), arrayLength - 1 - pivot);
+    QuickSort_TwoNumSum(pArray, indexRight);
+    QuickSort_TwoNumSum(&(pArray[indexRight+1]), arrayLength - 1 - indexRight);
 
     return;
 }
