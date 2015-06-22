@@ -64,7 +64,7 @@ int main () {
             for (index = 1; index < pIndexNode->pSeq->num; index++) {
                 int diff = abs(pIndexNode->pSeq->elements[index] - pIndexNode->pSeq->elements[index-1]);
 
-                if (diff < pIndexNode->pSeq->num) {
+                if ((diff > 0) && (diff < pIndexNode->pSeq->num)) {
                     if (elemDiff[diff-1] > 0) {
                         jolly = 0;
                         break;
