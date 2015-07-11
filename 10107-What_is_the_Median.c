@@ -2,17 +2,17 @@
 
 #define MAX_INPUT_NUM 10000
 
-typedef int (*CompareFunc) (unsigned int x, unsigned int y);
+typedef int (*CompareFunc) (int x, int y);
 
-int CompareLess (unsigned int x, unsigned int y) {
+int CompareLess (int x, int y) {
     return ((x < y) ? 1 : 0);
 }
 
-int CompareGreater (unsigned int x, unsigned int y) {
+int CompareGreater (int x, int y) {
     return ((x > y) ? 1 : 0);
 }
 
-void UpHeap (unsigned int* heap, int size, CompareFunc Compare) {
+void UpHeap (int* heap, int size, CompareFunc Compare) {
     int index = size - 1;
 
     if (heap == NULL) {
@@ -20,7 +20,7 @@ void UpHeap (unsigned int* heap, int size, CompareFunc Compare) {
     }
 
     while ((index != 0) && Compare(heap[index], heap[(index+1)/2-1])) {
-        unsigned int temp = heap[index];
+        int temp = heap[index];
         heap[index] = heap[(index+1)/2-1];
         heap[(index+1)/2-1] = temp;
         index = (index + 1) / 2 - 1;
@@ -29,7 +29,7 @@ void UpHeap (unsigned int* heap, int size, CompareFunc Compare) {
     return;
 }
 
-void DownHeap (unsigned int* heap, int size, CompareFunc Compare) {
+void DownHeap (int* heap, int size, CompareFunc Compare) {
     int index = 0;
 
     if (heap == NULL) {
@@ -41,25 +41,25 @@ void DownHeap (unsigned int* heap, int size, CompareFunc Compare) {
             break;
         }
         else {
-            if(Compare(heap[index], heap[(index+1)*2-1])) {
-                unsigned int temp = heap[index];
-                heap[index] = heap[(index+1)*2-1];
-                heap[(index+1)*2-1] = temp;
-                index = (index + 1) * 2 - 1;
-                continue;
-            }
-        }
+            int compIndex = 0;
 
-        if ((index + 1) * 2 >= size) {
-            break;
-        }
-        else {
-            if(Compare(heap[index], heap[(index+1)*2])) {
-                unsigned int temp = heap[index];
-                heap[index] = heap[(index+1)*2];
-                heap[(index+1)*2] = temp;
-                index = (index + 1) * 2;
-                continue;
+            if ((index + 1) * 2 >= size) {
+                compIndex = (index + 1) * 2 - 1;
+            }
+            else {
+                if (!Compare(heap[(index+1)*2-1], heap[(index+1)*2])) {
+                    compIndex = (index + 1) * 2 - 1;
+                }
+                else {
+                    compIndex = (index + 1) * 2;
+                }
+            }
+
+            if(Compare(heap[index], heap[compIndex])) {
+                int temp = heap[index];
+                heap[index] = heap[compIndex];
+                heap[compIndex] = temp;
+                index = compIndex;
             }
             else {
                 break;
@@ -73,11 +73,11 @@ void DownHeap (unsigned int* heap, int size, CompareFunc Compare) {
 int main () {
     int minHeapSize = 0;
     int maxHeapSize = 0;
-    unsigned int minHeap[MAX_INPUT_NUM/2] = {0};
-    unsigned int maxHeap[MAX_INPUT_NUM/2] = {0};
-    unsigned int input = 0;
+    int minHeap[MAX_INPUT_NUM/2+1] = {0};
+    int maxHeap[MAX_INPUT_NUM/2+1] = {0};
+    int input = 0;
 
-    while (scanf("%u", &input) == 1) {
+    while (scanf("%d", &input) == 1) {
         if (maxHeapSize == 0) {
             maxHeap[0] = input;
             maxHeapSize++;
@@ -86,43 +86,47 @@ int main () {
         }
         else {
             if (input <= maxHeap[0]) {
-                if (maxHeapSize > minHeapSize) {
-                    minHeap[minHeapSize] = maxHeap[0];
-                    minHeapSize++;
-                    UpHeap(minHeap, minHeapSize, CompareLess);
-                    maxHeap[0] = input;
-                    DownHeap(maxHeap, maxHeapSize, CompareLess);
-                }
-                else {
-                    maxHeap[maxHeapSize] = input;
-                    maxHeapSize++;
-                    UpHeap(maxHeap, maxHeapSize, CompareGreater);
-                }
+                maxHeap[maxHeapSize] = input;
+                maxHeapSize++;
+                UpHeap(maxHeap, maxHeapSize, CompareGreater);
+                DownHeap(maxHeap, maxHeapSize, CompareLess);
             }
             else {
-                if (minHeapSize > maxHeapSize) {
-                    maxHeap[maxHeapSize] = minHeap[0];
-                    maxHeapSize++;
-                    UpHeap(maxHeap, maxHeapSize, CompareGreater);
-                    minHeap[0] = input;
-                    DownHeap(minHeap, minHeapSize, CompareGreater);
-                }
-                else {
-                    minHeap[minHeapSize] = input;
-                    minHeapSize++;
-                    UpHeap(minHeap, minHeapSize, CompareLess);
-                }
+                minHeap[minHeapSize] = input;
+                minHeapSize++;
+                UpHeap(minHeap, minHeapSize, CompareLess);
+                DownHeap(minHeap, minHeapSize, CompareGreater);
             }
         }
 
+        if (maxHeapSize - minHeapSize == 2) {
+            minHeap[minHeapSize] = maxHeap[0];
+            minHeapSize++;
+            UpHeap(minHeap, minHeapSize, CompareLess);
+            DownHeap(minHeap, minHeapSize, CompareGreater);
+            maxHeap[0] = maxHeap[maxHeapSize-1];
+            maxHeapSize--;
+            DownHeap(maxHeap, maxHeapSize, CompareLess);
+        }
+
+        if (minHeapSize - maxHeapSize == 2) {
+            maxHeap[maxHeapSize] = minHeap[0];
+            maxHeapSize++;
+            UpHeap(maxHeap, maxHeapSize, CompareGreater);
+            DownHeap(maxHeap, maxHeapSize, CompareLess);
+            minHeap[0] = minHeap[minHeapSize-1];
+            minHeapSize--;
+            DownHeap(minHeap, minHeapSize, CompareGreater);
+        }
+
         if (maxHeapSize == minHeapSize) {
-            printf("%u\n", (maxHeap[0] + minHeap[0]) / 2);
+            printf("%d\n", (maxHeap[0] + minHeap[0]) / 2);
         }
         else if (maxHeapSize > minHeapSize) {
-            printf("%u\n", maxHeap[0]);
+            printf("%d\n", maxHeap[0]);
         }
         else {
-            printf("%u\n", minHeap[0]);
+            printf("%d\n", minHeap[0]);
         }
     }
 
