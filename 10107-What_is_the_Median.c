@@ -71,29 +71,58 @@ void DownHeap (unsigned int* heap, int size, CompareFunc Compare) {
 }
 
 int main () {
-    int minHeapNum = 0;
-    int maxHeapNum = 0;
+    int minHeapSize = 0;
+    int maxHeapSize = 0;
     unsigned int minHeap[MAX_INPUT_NUM/2] = {0};
     unsigned int maxHeap[MAX_INPUT_NUM/2] = {0};
     unsigned int input = 0;
 
     while (scanf("%u", &input) == 1) {
-        if (maxHeapNum == 0) {
+        if (maxHeapSize == 0) {
             maxHeap[0] = input;
-            maxHeapNum++;
+            maxHeapSize++;
             printf("%d\n", input);
             continue;
         }
         else {
-            if ((input <= maxHeap[0]) && (maxHeapNum > minHeapNum)) {
-                minHeap[minHeapNum] = maxHeap[0];
-                minHeapNum++;
-                UpHeap(minHeap, minHeapNum, CompareLess);
-                maxHeap[0] = input;
-                DownHeap(maxHeap, maxHeapNum, CompareLess);
+            if (input <= maxHeap[0]) {
+                if (maxHeapSize > minHeapSize) {
+                    minHeap[minHeapSize] = maxHeap[0];
+                    minHeapSize++;
+                    UpHeap(minHeap, minHeapSize, CompareLess);
+                    maxHeap[0] = input;
+                    DownHeap(maxHeap, maxHeapSize, CompareLess);
+                }
+                else {
+                    maxHeap[maxHeapSize] = input;
+                    maxHeapSize++;
+                    UpHeap(maxHeap, maxHeapSize, CompareGreater);
+                }
             }
             else {
+                if (minHeapSize > maxHeapSize) {
+                    maxHeap[maxHeapSize] = minHeap[0];
+                    maxHeapSize++;
+                    UpHeap(maxHeap, maxHeapSize, CompareGreater);
+                    minHeap[0] = input;
+                    DownHeap(minHeap, minHeapSize, CompareGreater);
+                }
+                else {
+                    minHeap[minHeapSize] = input;
+                    minHeapSize++;
+                    UpHeap(minHeap, minHeapSize, CompareLess);
+                }
             }
+        }
+
+        if (maxHeapSize == minHeapSize) {
+            printf("%u\n", (maxHeap[0] + minHeap[0]) / 2);
+        }
+        else if (maxHeapSize > minHeapSize) {
+            printf("%u\n", maxHeap[0]);
+        }
+        else {
+            printf("%u\n", minHeap[0]);
         }
     }
 
