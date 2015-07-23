@@ -37,7 +37,41 @@ int ReverseDigits (int num) {
     return result;
 }
 
-void FindPalindrome (int num, int* pIterCount, int* pPalindrome) {
+int FindPalindrome (int num, int* pPalindrome, int* pIterCountData, int* pPalindromeData) {
+    if (num < MAX_DATABASE_SIZE) {
+        if (pIterCountData[num] > 0) {
+            *pPalindrome = pPalindromeData[num];
+            return pIterCountData[num];
+        }
+    }
+
+    if (num == ReverseDigits(num)) {
+        *pPalindrome = num;
+
+        if (num < MAX_DATABASE_SIZE) {
+            pIterCountData[num] = 0;
+            pPalindromeData[num] = num;
+        }
+
+        return 0;
+    }
+    else {
+        int reverseNum = ReverseDigits(num);
+        int sum = num + reverseNum;
+        int count = FindPalindrome(sum, pPalindrome, pIterCountData, pPalindromeData);
+
+        if (num < MAX_DATABASE_SIZE) {
+            pIterCountData[num] = count + 1;
+            pPalindromeData[num] = *pPalindrome;
+        }
+
+        if (reverseNum < MAX_DATABASE_SIZE) {
+            pIterCountData[reverseNum] = count + 1;
+            pPalindromeData[reverseNum] = *pPalindrome;
+        }
+
+        return (count + 1);
+    }
 }
 
 int main () {
@@ -56,8 +90,12 @@ int main () {
     }
 
     for (index = 0; index < inputNum; index++) {
-        printf("%d\n", ReverseDigits(input[index]));
+        int palindrome = 0;
+        int count = FindPalindrome(input[index], &palindrome, iterCountDataBase, palindromeDataBase);
+
+        printf("%d %d\n", count, palindrome);
     }
 
+    free(input);
     return 0;
 }
