@@ -4,12 +4,12 @@
 #define MAX_DATABASE_SIZE 100000
 #define MAX_DIGIT_SIZE 12
 
-int ReverseDigits (int num) {
+unsigned int ReverseDigits (unsigned int num) {
     int count = 0;
-    int max = 0;
-    int cur10Times = 10, pre10Times = 0;
+    unsigned int max = 0;
+    unsigned int cur10Times = 10, pre10Times = 0;
     int index = 0;
-    int result = 0;
+    unsigned int result = 0;
     int buffer[MAX_DIGIT_SIZE] = {0};
 
     while (num > max) {
@@ -37,7 +37,7 @@ int ReverseDigits (int num) {
     return result;
 }
 
-int FindPalindrome (int num, int* pPalindrome, int* pIterCountData, int* pPalindromeData) {
+int FindPalindrome (int num, unsigned int* pPalindrome, int* pIterCountData, unsigned int* pPalindromeData) {
     if (num < MAX_DATABASE_SIZE) {
         if (pIterCountData[num] > 0) {
             *pPalindrome = pPalindromeData[num];
@@ -56,8 +56,8 @@ int FindPalindrome (int num, int* pPalindrome, int* pIterCountData, int* pPalind
         return 0;
     }
     else {
-        int reverseNum = ReverseDigits(num);
-        int sum = num + reverseNum;
+        unsigned int reverseNum = ReverseDigits(num);
+        unsigned int sum = num + reverseNum;
         int count = FindPalindrome(sum, pPalindrome, pIterCountData, pPalindromeData);
 
         if (num < MAX_DATABASE_SIZE) {
@@ -77,23 +77,23 @@ int FindPalindrome (int num, int* pPalindrome, int* pIterCountData, int* pPalind
 int main () {
     int inputNum = 0;
     int index = 0;
-    int* input = NULL;
+    unsigned int* input = NULL;
     int iterCountDataBase[MAX_DATABASE_SIZE] = {0};
-    int palindromeDataBase[MAX_DATABASE_SIZE] = {0};
+    unsigned int palindromeDataBase[MAX_DATABASE_SIZE] = {0};
 
     scanf("%d", &inputNum);
 
-    input = (int*)malloc(inputNum*sizeof(int));
+    input = (unsigned int*)malloc(inputNum*sizeof(unsigned int));
 
     for (index = 0; index < inputNum; index++) {
-        scanf("%d", &(input[index]));
+        scanf("%u", &(input[index]));
     }
 
     for (index = 0; index < inputNum; index++) {
-        int palindrome = 0;
+        unsigned int palindrome = 0;
         int count = FindPalindrome(input[index], &palindrome, iterCountDataBase, palindromeDataBase);
 
-        printf("%d %d\n", count, palindrome);
+        printf("%d %u\n", count, palindrome);
     }
 
     free(input);
