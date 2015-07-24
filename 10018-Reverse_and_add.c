@@ -4,10 +4,10 @@
 #define MAX_DATABASE_SIZE 100000
 #define MAX_DIGIT_SIZE 12
 
-long ReverseDigits (long num) {
+long long ReverseDigits (long long num) {
     int count = 0;
     int index = 0;
-    long result = 0;
+    long long result = 0;
     int buffer[MAX_DIGIT_SIZE] = {0};
 
     if (num < 0) {
@@ -27,7 +27,7 @@ long ReverseDigits (long num) {
     return result;
 }
 
-int FindPalindrome (long num, long* pPalindrome, int* pIterCountData, long* pPalindromeData) {
+int FindPalindrome (long long num, long long* pPalindrome, int* pIterCountData, long long* pPalindromeData) {
     if (num < MAX_DATABASE_SIZE) {
         if (pIterCountData[num] > 0) {
             *pPalindrome = pPalindromeData[num];
@@ -40,8 +40,8 @@ int FindPalindrome (long num, long* pPalindrome, int* pIterCountData, long* pPal
         return 1;
     }
     else {
-        long reverseNum = ReverseDigits(num);
-        long sum = num + reverseNum;
+        long long reverseNum = ReverseDigits(num);
+        long long sum = num + reverseNum;
         int count = FindPalindrome(sum, pPalindrome, pIterCountData, pPalindromeData);
 
         if (num < MAX_DATABASE_SIZE) {
@@ -61,25 +61,25 @@ int FindPalindrome (long num, long* pPalindrome, int* pIterCountData, long* pPal
 int main () {
     int inputNum = 0;
     int index = 0;
-    long* input = NULL;
+    long long* input = NULL;
     int iterCountDataBase[MAX_DATABASE_SIZE] = {0};
-    long palindromeDataBase[MAX_DATABASE_SIZE] = {0};
+    long long palindromeDataBase[MAX_DATABASE_SIZE] = {0};
 
     scanf("%d", &inputNum);
 
-    input = (long*)malloc(inputNum*sizeof(long));
+    input = (long long*)malloc(inputNum*sizeof(long long));
 
     for (index = 0; index < inputNum; index++) {
-        scanf("%ld", &(input[index]));
+        scanf("%lld", &(input[index]));
     }
 
     for (index = 0; index < inputNum; index++) {
-        long reverseNum = ReverseDigits(input[index]);
-        long sum = input[index] + reverseNum;
-        long palindrome = 0;
+        long long reverseNum = ReverseDigits(input[index]);
+        long long sum = input[index] + reverseNum;
+        long long palindrome = 0;
         int count = FindPalindrome(sum, &palindrome, iterCountDataBase, palindromeDataBase);
 
-        printf("%d %ld\n", count, palindrome);
+        printf("%d %lld\n", count, palindrome);
     }
 
     free(input);
