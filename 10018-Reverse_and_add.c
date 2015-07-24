@@ -5,23 +5,16 @@
 #define MAX_DIGIT_SIZE 12
 
 long long ReverseDigits (long long num) {
-    int count = 0;
     int index = 0;
     long long result = 0;
-    int buffer[MAX_DIGIT_SIZE] = {0};
 
     if (num < 0) {
         num = -num;
     }
 
     while (num > 0) {
-        buffer[count] = num % 10;
+        result = result * 10 + (num % 10);
         num /= 10;
-        count++;
-    }
-
-    for (index = 0; index < count; index++) {
-        result = result * 10 + buffer[index];
     }
 
     return result;
@@ -47,11 +40,6 @@ int FindPalindrome (long long num, long long* pPalindrome, int* pIterCountData, 
         if (num < MAX_DATABASE_SIZE) {
             pIterCountData[num] = count + 1;
             pPalindromeData[num] = *pPalindrome;
-        }
-
-        if (reverseNum < MAX_DATABASE_SIZE) {
-            pIterCountData[reverseNum] = count + 1;
-            pPalindromeData[reverseNum] = *pPalindrome;
         }
 
         return (count + 1);
