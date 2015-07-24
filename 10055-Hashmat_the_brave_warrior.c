@@ -1,14 +1,14 @@
 #include <stdio.h>
 
 int main () {
-    unsigned int num1 = 0, num2 = 0;
+    unsigned long long num1 = 0, num2 = 0;
 
-    while (scanf("%u %u", &num1, &num2) == 2) {
+    while (scanf("%llu %llu", &num1, &num2) == 2) {
         if (num1 >= num2) {
-            printf("%u\n", num1 - num2);
+            printf("%llu\n", num1 - num2);
         }
         else {
-            printf("%u\n", num2 - num1);
+            printf("%llu\n", num2 - num1);
         }
     }
 
