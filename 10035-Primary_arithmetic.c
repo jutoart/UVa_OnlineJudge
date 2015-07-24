@@ -23,15 +23,11 @@ int main () {
 
             sum = digit1 + digit2 + carry;
 
-            if (sum > 10) {
+            if (sum >= 10) {
                 count++;
             }
 
             carry = sum / 10;
-        }
-
-        if (carry > 0) {
-            count++;
         }
 
         if (count == 0) {
